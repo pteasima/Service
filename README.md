@@ -122,8 +122,8 @@ extension Result where Failure == Error {
 - Why?
 
 ```
-struct GoogleView_Previews/*: Not a PreviewProvider*/ {
-  @ViewBuilder static var previews: some View {
+struct GoogleView_Previews: PreviewProvider {
+  static var previews: some View {
     // default config
     GoogleView()
     // fetch from google but open in duckduckgo
