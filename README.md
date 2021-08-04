@@ -10,7 +10,7 @@
     - So it should have access to the whole environment, to be able to do anything.
   
 ```
-@dynamicMemberLookup public protocol Service: EnvironmentKey where Value == Self {
+@dynamicMemberLookup protocol Service: EnvironmentKey where Value == Self {
   init()
   @MainActor var environment: EnvironmentValues { get set }
   typealias Endpoint<Action> = (EnvironmentValues) -> Action
