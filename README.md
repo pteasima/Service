@@ -1,5 +1,5 @@
 # Service
-- SwiftUI solves dependency injection in an ingenius, extensible way.
+- SwiftUI solves dependency injection in an ingenious, extensible way.
 - The EnvironmentValues struct can resolve services from arbitrary, even user defined EnvironmentKeys.
 - Furthermore, SwiftUI allows you to modify the environment at any point in the view tree. This means you can have different services injected into a subtree of Views.
 - So you can go nuts with configurations, should you need to, which you probably won’t.
