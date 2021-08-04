@@ -122,21 +122,22 @@ extension Result where Failure == Error {
 - Why?
 
 ```
-struct GoogleView_Previews: PreviewProvider {
-  static var previews: some View {
+struct GoogleView_Previews/*: Not a PreviewProvider*/ {
+  @ViewBuilder static var previews: some View {
     // default config
     GoogleView()
     // fetch from google but open in duckduckgo
     GoogleView()
-      .transformEnvironment(\.[service: \Google.self].endpoints.open) {
-        $0 = { environment in
-          { query in
-            var components = URLComponents(string: "https://www.duckduckgo.com")!
-            components.queryItems = [URLQueryItem(name: "q", value: query)]
-            environment.openURL(components.url!)
-          }
-        }
-      }
+      .environment(
+        \.[service: \Google.self].endpoints.open,
+         { environment in
+           { query in
+             var components = URLComponents(string: "https://www.duckduckgo.com")!
+             components.queryItems = [URLQueryItem(name: "q", value: query)]
+             environment.openURL(components.url!)
+           }
+         }
+      )
   }
 }
 ```
