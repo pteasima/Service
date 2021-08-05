@@ -5,25 +5,25 @@ import SwiftUI
 final class ServiceTests: XCTestCase {
     func testExample() throws {}
 }
-// for now I'm just testing that below code builds
 
-struct Google: Service {
-  var environment: EnvironmentValues = .init()
-  var endpoints = (
-    open: { environment in
-      { query in
-        environment.openURL(url(for: query))
-      }
-    } as Endpoint<(String) -> Void>,
-    fetch: { environment in
-      { query in
-        //we're using `shared` session here, but we might as well retrieve one from the environment
-        let session = URLSession.shared
-        let (data, response) = try await session.data(from: url(for: query))
-        return data
-      }
-    } as Endpoint<(String) async throws -> Data>
-  )
+
+// for now I'm just testing that below code builds
+struct Google: EnvironmentKey {
+  static var defaultValue: Self = .init()
+  
+  var open: Endpoint<(String) -> Void> = { environment in
+    { query in
+      environment.openURL(url(for: query))
+    }
+  }
+  var fetch: Endpoint<(String) async throws -> Data> = { environment in
+    { query in
+      //we're using `shared` session here, but we might as well retrieve one from the environment
+      let session = URLSession.shared
+      let (data, response) = try await session.data(from: url(for: query))
+      return data
+    }
+  }
   
   private static func url(for query: String) -> URL {
     var components = URLComponents(string: "https://www.google.com")!
@@ -43,7 +43,7 @@ extension Result where Failure == Error {
 }
 
 struct GoogleView: View {
-  @Environment() private var google: Google
+  @Environment() private var google: Service<Google>
   
   @State var query: String = ""
   @State var fetchedData: Result<Data, Error>?
@@ -80,7 +80,7 @@ struct GoogleView_Previews/*: Not a PreviewProvider*/ {
     // fetch from google but open in duckduckgo
     GoogleView()
       .environment(
-        \.[service: \Google.self].endpoints.open,
+        \.[key: \Google.self].open,
          { environment in
            { query in
              var components = URLComponents(string: "https://www.duckduckgo.com")!
