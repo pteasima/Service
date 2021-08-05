@@ -1,5 +1,5 @@
 # Service
-- SwiftUI solves dependency injection in an ingenius, extensible way.
+- SwiftUI solves dependency injection in an ingenious, extensible way.
 - The EnvironmentValues struct can resolve services from arbitrary, even user defined EnvironmentKeys.
 - Furthermore, SwiftUI allows you to modify the environment at any point in the view tree. This means you can have different services injected into a subtree of Views.
 - So you can go nuts with configurations, should you need to, which you probably won’t.
@@ -10,7 +10,7 @@
     - So it should have access to the whole environment, to be able to do anything.
   
 ```
-@dynamicMemberLookup public protocol Service: EnvironmentKey where Value == Self {
+@dynamicMemberLookup protocol Service: EnvironmentKey where Value == Self {
   init()
   var environment: EnvironmentValues { get set }
   typealias Endpoint<Action> = (EnvironmentValues) -> Action
@@ -122,8 +122,8 @@ extension Result where Failure == Error {
 - Why?
 
 ```
-struct GoogleView_Previews/*: Not a PreviewProvider*/ {
-  @ViewBuilder static var previews: some View {
+struct GoogleView_Previews: PreviewProvider {
+  static var previews: some View {
     // default config
     GoogleView()
     // fetch from google but open in duckduckgo
