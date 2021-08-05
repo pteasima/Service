@@ -12,24 +12,24 @@
 ```
 @dynamicMemberLookup public protocol Service: EnvironmentKey where Value == Self {
   init()
-  @MainActor var environment: EnvironmentValues { get set }
+  var environment: EnvironmentValues { get set }
   typealias Endpoint<Action> = (EnvironmentValues) -> Action
   
   associatedtype Endpoints
-  @MainActor var endpoints: Endpoints { get }
+  var endpoints: Endpoints { get }
 }
 extension Service {
   static var defaultValue: Self { .init() }
 }
 
 extension Service {
-  @MainActor subscript<Action>(dynamicMember keyPath: KeyPath<Endpoints, Endpoint<Action>>) -> Action {
+  subscript<Action>(dynamicMember keyPath: KeyPath<Endpoints, Endpoint<Action>>) -> Action {
     endpoints[keyPath: keyPath](environment)
   }
 }
 
 extension EnvironmentValues {
-  @MainActor subscript<S: Service>(service keyPath: KeyPath<S, S>) -> S {
+  subscript<S: Service>(service keyPath: KeyPath<S, S>) -> S {
     get {
       var instance = self[S.self]
       instance.environment = self
